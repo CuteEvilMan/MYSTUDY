@@ -1,0 +1,73 @@
+
+clc; clear; close all;
+
+% ================= 实验数据输入 =================
+data = [
+    0.200, -5.87, 5.93, -5.92, 5.78;
+    0.400, -11.63, 11.83, -11.82, 11.64;
+    0.600, -17.48, 17.67, -17.75, 17.28;
+    0.800, -23.30, 23.46, -23.59, 23.07;
+    1.000, -29.01, 29.23, -29.46, 28.82;
+    1.200, -35.80, 35.05, -35.22, 34.46;
+    1.400, -40.50, 40.65, -41.01, 40.11;
+    1.600, -46.11, 46.32, -46.68, 45.65;
+    1.800, -51.53, 51.83, -52.39, 51.18;
+    2.000, -57.23, 57.64, -57.94, 56.57;
+];
+
+% ================= 数据提取与处理 =================
+I_s = data(:, 1);          % 工作电流 [mA]
+V1 = data(:, 2);           % 电压V1-V4 [mV]
+V2 = data(:, 3);
+V3 = data(:, 4);
+V4 = data(:, 5);
+
+% 霍尔电压计算 (符号已修正)
+V_H = -(V1 - V2 + V3 - V4) / 4 ; % 单位：mV
+
+% ================= 图形绘制 =================
+figure('Color', 'white', 'Position', [100 100 800 600]);
+
+% 绘制实验数据点+实线连接
+
+% 坐标轴样式设置
+ax = gca;
+ax.FontName = 'Arial';
+ax.FontSize = 13;
+ax.LineWidth = 1.2;
+ax.XLabel.String = 'I_s (mA)';
+ax.YLabel.String = 'V_H (mV)';
+ax.XLabel.FontSize = 13;
+ax.YLabel.FontSize = 13;
+ax.XLim = [0, ceil(max(I_s)*1.1)];    % X轴强制从零开始
+ax.YLim = [0, ceil(max(V_H)*1.1)];     % Y轴强制从零开始
+grid on;
+
+% ================= 线性拟合 =================
+p = polyfit(I_s, V_H, 1);             % 一次多项式拟合
+fit_line = polyval(p, I_s);           % 仅覆盖实际数据范围
+
+% 绘制拟合线（不从原点开始）
+hold on;
+plot(I_s, fit_line, '-o', 'LineWidth', 2);
+
+% ================= 标注与图例 =================
+% 显示拟合方程
+eqn_text = sprintf('V_H = %.2f I_s + %.2f', p(1), p(2));
+text(0.5, max(V_H)*0.8, eqn_text,...
+    'FontSize', 12,...
+    'Color', 'r',...
+    'HorizontalAlignment', 'left');
+
+% 计算R²值
+V_H_pred = polyval(p, I_s);
+SS_res = sum((V_H - V_H_pred).^2);
+SS_tot = sum((V_H - mean(V_H)).^2);
+R_squared = 1 - SS_res/SS_tot;
+
+% 显示R²值
+text(0.5, max(V_H)*0.7,...
+    sprintf('R^2 = %.4f', R_squared),...
+    'FontSize', 12,...
+    'Color', 'r',...
+    'HorizontalAlignment', 'left');
