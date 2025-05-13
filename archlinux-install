@@ -1,0 +1,108 @@
+archlinux安装教程
+
+archlinux的官方教程在：https://wiki.archlinux.org/title/Installation_guide
+
+我目前在已经安装了archlinux的电脑上工作，希望在一块硬盘上安装archlinux
+首先对硬盘进行分区
+这一步我使用gdiak
+
+由于我使用UEFI+GPT
+因此需要一个ESP分区
+大小为1G 类型选为 EF00
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048         2099199   1024.0 MiB  EF00  EFI system partition
+   2         2099200        35653631   16.0 GiB    8200  Linux swap
+   3        35653632        98568191   30.0 GiB    8300  Linux filesystem
+   4        98568192       234440703   64.8 GiB    8300  Linux filesystem
+   大概这样，依次为efi分区，swap分区，根分区,/home分区
+
+
+  mkfs.ext4 /dev/sda3 
+  mkfs.ext4 /dev/sda4
+
+  格式化并使用swap 分区
+  mkswap /dev/sda2
+  swapon /dev/sda2
+
+  再挂载一下
+  mount /dev/sda3 /mnt --mkdir
+  mount /dev/sda4 /mnt/home --mkdir
+  mount /dev/sda1 /mnt/boot --mkdir
+
+选择一下镜像，即编辑一下/etc/pacman.conf 和 /etc/pacman.d/mirrorlist
+我的mirrorlist如下：
+
+Server = https://mirrors.hust.edu.cn/archlinux/$repo/os/$arch
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
+Server = https://mirrors.aliyun.com/archlinux/$repo/os/$arch
+
+
+Server = https://mirrors.shanghaitech.edu.cn/archlinux/$repo/os/$arch
+Server = https://mirrors.cqu.edu.cn/archlinux/$repo/os/$arch
+Server = https://mirrors.neusoft.edu.cn/archlinux/$repo/os/$arch
+Server = https://mirrors.hit.edu.cn/archlinux/$repo/os/$arch
+Server = https://mirrors.jlu.edu.cn/archlinux/$repo/os/$arch
+上面三个分别是华科源，清华源和阿里源，你可以问一下ai,有哪些好的源
+
+
+
+  然后下载一些基础包
+  pacstrap -K /mnt base linux linux-firmware
+
+  fstab生成fstab文件
+  genfstab -U /mnt >> /mnt/etc/fstab
+
+  chroot一下
+  arch-chroot /mnt``
+  安装一些必备软件包
+
+pacman -S neovim intel-ucode networkmanager git base-devel sof-firmware e2fsprogs wpa_supplicant modemmanager sudo --needed
+
+建议你问一下ai各个软件包的作用再安装
+
+
+  设置一下时区
+  ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+我们中国人选上海就行了，如果你在其它地方可以问问ai 
+
+hwclock --systohcy一下
+
+编辑一下 /etc/locale.gen
+nvim /etc/locale.gen
+我喜欢将整个文件直接删掉，然后写上需要的内容
+en_US.UTF-8 UTF-8
+zh_CN.UTF-8 UTF-8
+再创建 /etc/locale.conf文件
+写入
+LANG=en_US.UTF-8
+不会用neovim建议问一下ai,或者问一下nano怎么用
+locale-gen一下
+
+编辑/etc/hostname
+nvim /etc/hostname
+
+写入你的主机名
+比如：NB
+
+systemctl enable NetworkManager
+一下，方便待会重启后联网
+
+修改一下root密码
+passwd
+
+安装一个引导加载环境
+
+archlinux的官方介绍：https://wiki.archlinux.org/title/Arch_boot_process#Boot_loader
+
+我推荐GRUB
+sudo pacman -S grub efibootmgr
+
+grub需要efibootmagr
+然后
+grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=grub
+
+grub-mkconfig -o /boot/grub/grub.cfg
+
+生成grub配置文件
+
