@@ -43,6 +43,9 @@ sudo pacman -S fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-rime --neede
 fcitx5-configtool配置一下
 
 中文输入法安装成功后
+现在可以将系统语言改为中文
+nvim /etc/locale.conf
+LANG=zh_CN.UTF-8
 
 sudo pacman -S chromium安装浏览器
 
