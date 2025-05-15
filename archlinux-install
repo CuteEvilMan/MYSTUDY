@@ -18,6 +18,13 @@ Number  Start (sector)    End (sector)  Size       Code  Name
    大概这样，依次为efi分区，swap分区，根分区,/home分区
 
 
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048         2099199   1024.0 MiB  EF00  EFI system partition
+   2         2099200        35653631   16.0 GiB    8200  Linux swap
+   3        35653632        98568191   30.0 GiB    8304  Linux x86-64 root (/)
+   4        98568192      1000214527   429.9 GiB   8302  Linux /home
+
+
   mkfs.ext4 /dev/sda3 
   mkfs.ext4 /dev/sda4
 
@@ -57,7 +64,20 @@ Server = https://mirrors.jlu.edu.cn/archlinux/$repo/os/$arch
   arch-chroot /mnt``
   安装一些必备软件包
 
-pacman -S neovim intel-ucode networkmanager git base-devel sof-firmware e2fsprogs wpa_supplicant modemmanager sudo --needed
+pacman -S neovim intel-ucode networkmanager git base-devel sof-firmware e2fsprogs sudo curl wget  --needed
+
+
+wget curl 是下载工具
+sudo 用来使用sudo命令
+neovim用来编辑文本,还有vi vim nano等
+intel-ucode是cpu微码,还有amd-ucode
+sof-firmware提供音频驱动
+git base-devel是开发用的,这里后面用来使用aur
+e2sprogs 用来管理文件系统
+networkmanager用来管理网络
+
+pacman -S tlp powertop 这些软件包用来笔记本电脑管理电源
+
 
 建议你问一下ai各个软件包的作用再安装
 
@@ -85,8 +105,6 @@ nvim /etc/hostname
 写入你的主机名
 比如：NB
 
-systemctl enable NetworkManager
-一下，方便待会重启后联网
 
 修改一下root密码
 passwd
@@ -109,8 +127,11 @@ grub-mkconfig -o /boot/grub/grub.cfg
 然后安装过程就基本完成了
 
 可以exit退出chroot环境
+
 umount -R /mnt
+
 解除挂载
+
 reboot 
 检验是否完成安装
 

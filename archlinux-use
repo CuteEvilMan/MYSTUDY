@@ -1,0 +1,51 @@
+现在讲解安装完archlinux后如何配置使得我们能正常使用
+主要是我自己的配置
+
+首先进入tty终端后
+systemctl enable NetworkMananger --now
+
+打开networkmanager
+
+
+然后因为我有连接无线网络的需求,所以
+
+我会使用 
+nmcli device wifi list  # 列出附近的 WiFi 热点
+sudo nmcli device wifi connect <SSID名称> password "<密码>"(--ask)
+
+连接网络
+
+然后安装一个添加一个用户
+useradd -m NB
+
+visudo给它加入sudoers文件
+passwd NB给它设置密码
+
+然后可以安装 一个图形桌面
+我比较喜欢 gnome
+
+因此
+
+sudo pacman -S wayland gdm gnome gnome-extra --needed
+
+所有选项都选default即可
+sytemctl enable gdm --now
+开机启动图形桌面
+启动图形界面正常后安装中文字体
+sudo pacman -S noto-fonts-cjk wqy-microhei wqy-bitmapfont adobe-source-han-sans-cn-fonts adobe-source-han-serif-cn-fonts --needed
+
+然后安装中文输入法
+
+sudo pacman -S fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-rime --needed
+
+
+然后
+fcitx5-configtool配置一下
+
+中文输入法安装成功后
+
+sudo pacman -S chromium安装浏览器
+
+git clone https://github.com/CuteEvilMan/MYSTUDY.git 
+
+记住我的教程
