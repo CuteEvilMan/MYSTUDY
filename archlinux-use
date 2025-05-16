@@ -21,6 +21,12 @@ useradd -m NB
 visudo给它加入sudoers文件
 passwd NB给它设置密码
 
+
+sudo pacman -S  noto-fonts ttf-dejavu ttf-roboto ttf-liberation --needed 
+
+
+安装一些英文字体
+
 然后可以安装 一个图形桌面
 我比较喜欢 gnome
 
