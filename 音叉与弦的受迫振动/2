@@ -1,0 +1,40 @@
+%% 输入数据
+f0 = [260.089, 221.640, 195.792, 175.609, 161.655, 150.413];
+M = [0, 5, 10, 15, 20, 25];
+
+%% 数据转换
+x = 1 ./ (f0.^2);  % 自变量 x = 1/f0²
+y = M;             % 因变量 y = M
+
+%% 最小二乘法计算（有截距项）
+n = length(x);
+sum_x = sum(x);
+sum_y = sum(y);
+sum_xy = sum(x .* y);
+sum_x2 = sum(x.^2);
+
+% 计算斜率 a 和截距 b
+a = (n * sum_xy - sum_x * sum_y) / (n * sum_x2 - sum_x^2);
+b = (sum_y - a * sum_x) / n;
+
+%% 显示拟合结果
+fprintf('===== 有截距模型 =====\n');
+fprintf('拟合方程: M = %.4f/f0² + %.4f\n', a, b);
+fprintf('斜率 a = %.4f\n截距 b = %.4f\n\n', a, b);
+
+%% 绘制数据点和拟合曲线
+x_fit = linspace(min(x), max(x), 100);
+y_fit = a * x_fit + b;
+
+figure;
+scatter(x, y, 80, 'r', 'filled');  % 原始数据
+hold on;
+plot(x_fit, y_fit, 'b-', 'LineWidth', 2);  % 拟合曲线
+hold off;
+
+% 图形标注
+xlabel('1/f_0^2');
+ylabel('M');
+title('M 与 1/f_0^2 的最小二乘拟合（有截距）');
+legend('原始数据', '拟合曲线', 'Location', 'northwest');
+grid on;
