@@ -40,17 +40,14 @@ Number  Start (sector)    End (sector)  Size       Code  Name
 选择一下镜像，即编辑一下/etc/pacman.conf 和 /etc/pacman.d/mirrorlist
 我的mirrorlist如下：
 
+
 Server = https://mirrors.hust.edu.cn/archlinux/$repo/os/$arch
 Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
+Server = https://mirrors.cernet.edu.cn/archlinux/$repo/os/$arch
 Server = https://mirrors.aliyun.com/archlinux/$repo/os/$arch
 
 
-Server = https://mirrors.shanghaitech.edu.cn/archlinux/$repo/os/$arch
-Server = https://mirrors.cqu.edu.cn/archlinux/$repo/os/$arch
-Server = https://mirrors.neusoft.edu.cn/archlinux/$repo/os/$arch
-Server = https://mirrors.hit.edu.cn/archlinux/$repo/os/$arch
-Server = https://mirrors.jlu.edu.cn/archlinux/$repo/os/$arch
-上面三个分别是华科源，清华源和阿里源，你可以问一下ai,有哪些好的源
+上面四个分别是华科源，清华源 联合镜像站  和阿里源，你可以问一下ai,有哪些好的源
 
 
 
@@ -64,12 +61,12 @@ Server = https://mirrors.jlu.edu.cn/archlinux/$repo/os/$arch
   arch-chroot /mnt``
   安装一些必备软件包
 
-pacman -S neovim intel-ucode networkmanager git base-devel sof-firmware e2fsprogs sudo curl wget  --needed
+pacman -S vim intel-ucode networkmanager git base-devel sof-firmware e2fsprogs sudo curl wget  --needed
 
 
 wget curl 是下载工具
 sudo 用来使用sudo命令
-neovim用来编辑文本,还有vi vim nano等
+vim用来编辑文本,还有vi neovim nano等
 intel-ucode是cpu微码,还有amd-ucode
 sof-firmware提供音频驱动
 git base-devel是开发用的,这里后面用来使用aur
@@ -86,7 +83,7 @@ pacman -S tlp powertop 这些软件包用来笔记本电脑管理电源
   ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 我们中国人选上海就行了，如果你在其它地方可以问问ai 
 
-hwclock --systohcy一下
+hwclock --systohc一下
 
 编辑一下 /etc/locale.gen
 nvim /etc/locale.gen

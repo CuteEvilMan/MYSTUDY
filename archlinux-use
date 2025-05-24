@@ -21,11 +21,16 @@ useradd -m NB
 visudo给它加入sudoers文件
 passwd NB给它设置密码
 
+sudo pacman -S noto-fonts notos-fonts-cjk ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols  --needed
+
+这样即可安装所需的几乎所有字体
 
 sudo pacman -S  noto-fonts ttf-dejavu ttf-roboto ttf-liberation --needed 
+安装更多英文字体
 
+安装更多中文字体
+sudo pacman -S noto-fonts-cjk wqy-microhei wqy-bitmapfont adobe-source-han-sans-cn-fonts adobe-source-han-serif-cn-fonts --needed
 
-安装一些英文字体
 
 然后可以安装 一个图形桌面
 我比较喜欢 gnome
@@ -37,11 +42,8 @@ sudo pacman -S wayland gdm gnome gnome-extra --needed
 所有选项都选default即可
 sytemctl enable gdm --now
 开机启动图形桌面
-启动图形界面正常后安装中文字体
-sudo pacman -S noto-fonts-cjk wqy-microhei wqy-bitmapfont adobe-source-han-sans-cn-fonts adobe-source-han-serif-cn-fonts --needed
 
-然后安装中文输入法
-
+安装中文输入法
 sudo pacman -S fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-rime --needed
 
 
@@ -49,12 +51,40 @@ sudo pacman -S fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-rime --neede
 fcitx5-configtool配置一下
 
 中文输入法安装成功后
+可以配置一下archlinuxcn
+vim /etc/pacman.conf
 
-现在可以将系统语言改为中文
-nvim /etc/locale.conf
-LANG=zh_CN.UTF-8
+加入
+[archlinuxcn]
+Server = https://mirrors.cernet.edu.cn/archlinuxcn/$arch
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
+Server = https://mirrors.hust.edu.cn/archlinuxcn/$arch
+这里我使用的是联合镜像站 清华 华科的镜像
 
-sudo pacman -S chromium安装浏览器
+然后
+sudo pacman -S archlinuxcn-keyring
+安装密钥
+如果遇到
+ error: archlinuxcn-keyring: Signature from "Jiachen YANG (Arch Linux Packager Signing Key) " is marginal trust
+可以使用
+ sudo pacman-key --lsign-key "farseerfc@archlinux.org"
+
+然后 sudo pacman -Syyu
+
+sudo pacman -S paru --needed  下载paru 
+
+
+sudo pacman -S chromium --needed
+安装浏览器
+还有firefox,brave等可以选择
+
+
+
+paru -S gnome-browser-connector --needed
+使得chromium可以管理插件
+
+
+
 如果你想使用蓝牙
 sudo pacman -S bluez bluez-utils --needed
 安装所需模块
