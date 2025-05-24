@@ -38,28 +38,32 @@ Number  Start (sector)    End (sector)  Size       Code  Name
   mount /dev/sda1 /mnt/boot --mkdir
 
 选择一下镜像，即编辑一下/etc/pacman.conf 和 /etc/pacman.d/mirrorlist
+
+可以通过
+https://archlinux.org/mirrorlist/all/
+获得所有的镜像服务器
+https://archlinux.org/mirrorlist/?country=CN&protocol=http&protocol=https&ip_version=4&ip_version=6&use_mirror_status=on
+是所有中国的服务器
+然后取消注释说需要的服务器即可
+
 我的mirrorlist如下：
 
+Server = http://mirror.lzu.edu.cn/archlinux/$repo/os/$arch
+Server = http://mirror.nyist.edu.cn/archlinux/$repo/os/$arch
+Server = http://mirrors.163.com/archlinux/$repo/os/$arch
+Server = http://mirrors.aliyun.com/archlinux/$repo/os/$arch
+Server = http://mirrors.bfsu.edu.cn/archlinux/$repo/os/$arch
+Server = http://mirrors.cqu.edu.cn/archlinux/$repo/os/$arch
 
-Server = https://mirrors.hust.edu.cn/archlinux/$repo/os/$arch
-Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
-Server = https://mirrors.cernet.edu.cn/archlinux/$repo/os/$arch
-Server = https://mirrors.aliyun.com/archlinux/$repo/os/$arch
+然后下载一些基础包
+pacstrap -K /mnt base linux linux-firmware
 
+fstab生成fstab文件
+genfstab -U /mnt >> /mnt/etc/fstab
 
-上面四个分别是华科源，清华源 联合镜像站  和阿里源，你可以问一下ai,有哪些好的源
-
-
-
-  然后下载一些基础包
-  pacstrap -K /mnt base linux linux-firmware
-
-  fstab生成fstab文件
-  genfstab -U /mnt >> /mnt/etc/fstab
-
-  chroot一下
-  arch-chroot /mnt``
-  安装一些必备软件包
+chroot一下
+arch-chroot /mnt``
+安装一些必备软件包
 
 pacman -S vim intel-ucode networkmanager git base-devel sof-firmware e2fsprogs sudo curl wget  --needed
 
@@ -73,7 +77,7 @@ git base-devel是开发用的,这里后面用来使用aur
 e2sprogs 用来管理文件系统
 networkmanager用来管理网络
 
-pacman -S tlp powertop 这些软件包用来笔记本电脑管理电源
+pacman -S tlp powertop --needed 这些软件包用来笔记本电脑管理电源
 
 
 建议你问一下ai各个软件包的作用再安装
@@ -86,18 +90,22 @@ pacman -S tlp powertop 这些软件包用来笔记本电脑管理电源
 hwclock --systohc一下
 
 编辑一下 /etc/locale.gen
-nvim /etc/locale.gen
+vim /etc/locale.gen
 我喜欢将整个文件直接删掉，然后写上需要的内容
+
 en_US.UTF-8 UTF-8
 zh_CN.UTF-8 UTF-8
+
 再创建 /etc/locale.conf文件
 写入
+
 LANG=en_US.UTF-8
 不会用neovim建议问一下ai,或者问一下nano怎么用
+
 locale-gen一下
 
 编辑/etc/hostname
-nvim /etc/hostname
+vim /etc/hostname
 
 写入你的主机名
 比如：NB
@@ -111,7 +119,7 @@ passwd
 archlinux的官方介绍：https://wiki.archlinux.org/title/Arch_boot_process#Boot_loader
 
 我推荐GRUB
-sudo pacman -S grub efibootmgr
+sudo pacman -S grub efibootmgr --needed
 
 grub需要efibootmagr
 然后
@@ -123,7 +131,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 然后安装过程就基本完成了
 
-可以exit退出chroot环境
+可以exit或者CTRL+D退出arch-chroot环境
 
 umount -R /mnt
 
