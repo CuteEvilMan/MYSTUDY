@@ -2,6 +2,40 @@ archlinux安装教程
 
 archlinux的官方教程在：https://wiki.archlinux.org/title/Installation_guide
 
+首先要制作启动U盘
+这里推荐ventoy
+大家可以自己去官网查看教程
+https://www.ventoy.net/en/index.html
+这里只介绍Linux上的教程
+
+首先下载
+南京大学镜像站
+https://mirrors.nju.edu.cn/github-release/ventoy/Ventoy/Ventoy%201.1.05%20release/ventoy-1.1.05-linux.tar.gz
+山东大学镜像站
+https://mirrors.sdu.edu.cn/github-release/1748080675/github-release/ventoy_Ventoy/v1.1.05/ventoy-1.1.05-linux.tar.gz
+
+sha256 : 3379c99890359dcff55aab7f7b3286f87c988d1da2fd616e6a9e305fb0a1de9e
+
+下载安装包，例如 ventoy-1.0.00-linux.tar.gz, 然后解压开.
+在终端以root权限执行 sudo sh Ventoy2Disk.sh -i /dev/XXX   其中 /dev/XXX 是U盘对应的设备名，比如 /dev/sdb
+
+Ventoy2Disk.sh  命令  [选项]  /dev/XXX
+  命令含义:
+    -i   安装ventoy到磁盘中 (如果对应磁盘已经安装了ventoy则会返回失败)
+    -I   强制安装ventoy到磁盘中，(不管原来有没有安装过)
+    -u   升级磁盘中的ventoy版本
+    -l   显示磁盘中的ventoy相关信息
+
+  选项含义: (可选)
+    -r SIZE_MB  在磁盘最后保留部分空间，单位 MB (只在安装时有效)
+    -s          启用安全启动支持 (默认是关闭的)
+    -g          使用GPT分区格式，默认是MBR格式 (只在安装时有效)
+    -L          主分区（镜像分区）的卷标 (默认是 Ventoy)
+针对Linux系统有几点需要特殊说明一下：
+1. 执行脚本时需要有root权限, 对一些系统比如ubuntu/deepin 执行的时候需要在前面加 sudo 比如 sudo sh Ventoy2Disk.sh -i /dev/sdb
+2. 必须cd到ventoy解压之后的目录下执行此脚本
+3. 请务必输入正确的设备名称，ventoy不会检查你输入的设备是U盘还是本地硬盘，如果输错了有可能会把你的系统盘格式化掉哦！
+
 我目前在已经安装了archlinux的电脑上工作，希望在一块硬盘上安装archlinux
 首先对硬盘进行分区
 这一步我使用gdiak
