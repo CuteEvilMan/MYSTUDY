@@ -87,7 +87,11 @@ sudo pacman -S chromium --needed
 sudo pacman -S gnome-browser-connector --needed
 使得chromium可以管理插件
 
+ sudo pacman -S libreoffice --needed
 
+ 安装libreoffice
+ sudo pacman -S libreoffice-fresh-zh-cn --needed
+安装libreoffice中文包
 
 如果你想使用蓝牙
 sudo pacman -S bluez bluez-utils --needed

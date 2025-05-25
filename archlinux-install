@@ -77,17 +77,23 @@ Number  Start (sector)    End (sector)  Size       Code  Name
 https://archlinux.org/mirrorlist/all/
 获得所有的镜像服务器
 https://archlinux.org/mirrorlist/?country=CN&protocol=http&protocol=https&ip_version=4&ip_version=6&use_mirror_status=on
+curl https://archlinux.org/mirrorlist/?country=CN&protocol=http&protocol=https&ip_version=4&ip_version=6&use_mirror_status=on -o /etc/pacman.d/mirrorlist2
+
+获得所有服务器
+sed -i 's/^#Server/Server/' /etc/pacman.d/mirrorlist2
+取消注释
+rankmirrors /etc/pacman.d/mirrorlist2 > /etc/pacman.d/mirrorlist
+
+对镜像站进行排名
+pacman -Syyu
+
+即可
+
 是所有中国的服务器
 然后取消注释说需要的服务器即可
 
 我的mirrorlist如下：
 
-Server = http://mirror.lzu.edu.cn/archlinux/$repo/os/$arch
-Server = http://mirror.nyist.edu.cn/archlinux/$repo/os/$arch
-Server = http://mirrors.163.com/archlinux/$repo/os/$arch
-Server = http://mirrors.aliyun.com/archlinux/$repo/os/$arch
-Server = http://mirrors.bfsu.edu.cn/archlinux/$repo/os/$arch
-Server = http://mirrors.cqu.edu.cn/archlinux/$repo/os/$arch
 
 然后下载一些基础包
 pacstrap -K /mnt base linux linux-firmware
