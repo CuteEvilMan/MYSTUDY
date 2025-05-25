@@ -111,6 +111,47 @@ export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 将plugings改为
 plugins=(git thefuck web-search jsontools z vi-mode zsh-syntax-highlighting zsh-autosuggestions 1password sudo command-not-found)
 
+
+
+现在再来介绍一下linuxqq如何使用
+
+首先
+paru -S linuxqq
+我使用的是wayland+GNOME
+这里我们发现Linuxqq无法使用fcitx5输入中文
+linuxqq是一个脚本
+> which linuxqq
+/usr/bin/linuxqq
+
+sudo vim /usr/bin/linuxqq
+
+将最后一行改成
+
+Exec=env GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx /opt/QQ/qq --ozone-platform-hint=x11
+#exec /opt/QQ/qq ${QQ_USER_FLAGS[@]} "$@"
+
+即可 
+或者还可以编辑desktop文件
+cp /usr/share/applications/qq.desktop ~/.local/share/applications/
+避免直接修改系统文件
+然后我改成了
+
+> cat ~/.local/share/applications/qq.desktop
+[Desktop Entry]
+Name=QQ
+Exec=env GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx linuxqq --ozone-platform-hint=x11 %U
+Terminal=true
+#这里改成true,这样打开QQ时会显示一个终端，方便我关掉它
+Type=Application
+Icon=qq
+StartupWMClass=QQ
+Categories=Network;
+Comment=QQ
+
+
+
+
+
 最后
 git clone https://github.com/CuteEvilMan/MYSTUDY.git 
 
