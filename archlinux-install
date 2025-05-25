@@ -96,7 +96,7 @@ fstab生成fstab文件
 genfstab -U /mnt >> /mnt/etc/fstab
 
 chroot一下
-arch-chroot /mnt``
+arch-chroot /mnt
 安装一些必备软件包
 
 pacman -S vim intel-ucode networkmanager git base-devel sof-firmware e2fsprogs sudo curl wget  --needed

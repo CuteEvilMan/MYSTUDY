@@ -19,6 +19,10 @@ sudo nmcli device wifi connect <SSID名称> password "<密码>"(--ask)
 useradd -m NB
 
 visudo给它加入sudoers文件
+这时候可能会报错，说没有vi
+
+ln -s /usr/bin/vim /usr/bin/vi
+即可
 passwd NB给它设置密码
 
 sudo pacman -S noto-fonts notos-fonts-cjk ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols  --needed
@@ -32,7 +36,7 @@ sudo pacman -S  noto-fonts ttf-dejavu ttf-roboto ttf-liberation --needed
 sudo pacman -S noto-fonts-cjk wqy-microhei wqy-bitmapfont adobe-source-han-sans-cn-fonts adobe-source-han-serif-cn-fonts --needed
 
 
-然后可以安装 一个图形桌面
+然后可以安装一个图形桌面
 我比较喜欢 gnome
 
 因此
@@ -48,7 +52,8 @@ sudo pacman -S fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-rime --neede
 
 
 然后
-fcitx5-configtool配置一下
+fcitx5-configtool
+配置一下
 
 中文输入法安装成功后
 可以配置一下archlinuxcn
@@ -79,8 +84,7 @@ sudo pacman -S chromium --needed
 还有firefox,brave等可以选择
 
 
-
-paru -S gnome-browser-connector --needed
+sudo pacman -S gnome-browser-connector --needed
 使得chromium可以管理插件
 
 
@@ -109,11 +113,11 @@ export ZSH="$HOME/.oh-my-zsh"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 将plugings改为
-plugins=(git thefuck web-search jsontools z vi-mode zsh-syntax-highlighting zsh-autosuggestions 1password sudo command-not-found)
+plugins=(git emotty  thefuck web-search jsontools z vi-mode zsh-syntax-highlighting zsh-autosuggestions 1password sudo command-not-found)
 
 
 
-现在再来介绍一下linuxqq如何使用
+现在再来介绍一下linuxqq如何使用(fcitx5中文输入)
 
 首先
 paru -S linuxqq
