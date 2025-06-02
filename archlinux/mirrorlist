@@ -1,11 +1,14 @@
-Server = https://mirrors.cernet.edu.cn/archlinux/$repo/os/$arch
-Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
+#Server = https://mirrors.cernet.edu.cn/archlinux/$repo/os/$arch
+#Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
 
 Server = http://mirrors.hust.edu.cn/archlinux/$repo/os/$arch
 Server = https://mirrors.hust.edu.cn/archlinux/$repo/os/$arch
 
 
-Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
+Server = http://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
+
+
 Server = http://mirrors.shanghaitech.edu.cn/archlinux/$repo/os/$arch
 Server = https://mirrors.wsyu.edu.cn/archlinux/$repo/os/$arch
 Server = http://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
@@ -14,10 +17,8 @@ Server = https://mirrors.cqu.edu.cn/archlinux/$repo/os/$arch
 Server = http://mirrors.jxust.edu.cn/archlinux/$repo/os/$arch
 Server = http://mirror.nyist.edu.cn/archlinux/$repo/os/$arch
 Server = https://mirrors.sjtug.sjtu.edu.cn/archlinux/$repo/os/$arch
-Server = http://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
 Server = https://mirror.nyist.edu.cn/archlinux/$repo/os/$arch
 Server = http://mirrors.aliyun.com/archlinux/$repo/os/$arch
-Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
 Server = https://mirrors.shanghaitech.edu.cn/archlinux/$repo/os/$arch
 Server = http://mirrors.hit.edu.cn/archlinux/$repo/os/$arch
 Server = http://mirrors.jlu.edu.cn/archlinux/$repo/os/$arch
