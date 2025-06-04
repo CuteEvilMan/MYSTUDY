@@ -16,7 +16,7 @@ https://mirrors.sdu.edu.cn/github-release/1748080675/github-release/ventoy_Vento
 
 sha256 : 3379c99890359dcff55aab7f7b3286f87c988d1da2fd616e6a9e305fb0a1de9e
 
-下载安装包，例如 ventoy-1.0.00-linux.tar.gz, 然后解压开.
+下载安装包，例如 ventoy-1.1.05-linux.tar.gz, 然后解压开.
 在终端以root权限执行 sudo sh Ventoy2Disk.sh -i /dev/XXX   其中 /dev/XXX 是U盘对应的设备名，比如 /dev/sdb
 
 Ventoy2Disk.sh  命令  [选项]  /dev/XXX
@@ -86,13 +86,8 @@ rankmirrors /etc/pacman.d/mirrorlist2 > /etc/pacman.d/mirrorlist
 
 对镜像站进行排名
 pacman -Syyu
-
 即可
 
-是所有中国的服务器
-然后取消注释说需要的服务器即可
-
-我的mirrorlist如下：
 
 
 然后下载一些基础包

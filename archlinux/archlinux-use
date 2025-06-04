@@ -26,14 +26,16 @@ ln -s /usr/bin/vim /usr/bin/vi
 passwd NB给它设置密码
 
 sudo pacman -S noto-fonts notos-fonts-cjk ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols  --needed
-
 这样即可安装所需的几乎所有字体
 
 sudo pacman -S  noto-fonts ttf-dejavu ttf-roboto ttf-liberation --needed 
 安装更多英文字体
 
-安装更多中文字体
 sudo pacman -S noto-fonts-cjk wqy-microhei wqy-bitmapfont adobe-source-han-sans-cn-fonts adobe-source-han-serif-cn-fonts --needed
+安装更多中文字体
+
+sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-extra ttf-hanazono adobe-source-han-sans-otc-fonts  --needed
+可以获得对几乎所有字符的支持
 
 
 然后可以安装一个图形桌面
@@ -107,20 +109,6 @@ sudo pacman -S zsh curl --needed
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-配置插件
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-
-nvim ~/.zshrc
-加入
-export ZSH="$HOME/.oh-my-zsh"
-export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-
-将plugings改为
-plugins=(git emotty  thefuck web-search jsontools z vi-mode zsh-syntax-highlighting zsh-autosuggestions 1password sudo command-not-found)
-
-
-
 现在再来介绍一下linuxqq如何使用(fcitx5中文输入)
 
 首先
@@ -135,7 +123,7 @@ sudo vim /usr/bin/linuxqq
 
 将最后一行改成
 
-Exec=env GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx /opt/QQ/qq --ozone-platform-hint=x11
+Exec=env GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx /opt/QQ/qq
 #exec /opt/QQ/qq ${QQ_USER_FLAGS[@]} "$@"
 
 即可 
@@ -147,7 +135,7 @@ cp /usr/share/applications/qq.desktop ~/.local/share/applications/
 > cat ~/.local/share/applications/qq.desktop
 [Desktop Entry]
 Name=QQ
-Exec=env GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx linuxqq --ozone-platform-hint=x11 %U
+Exec=env GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx linuxqq %U
 Terminal=true
 #这里改成true,这样打开QQ时会显示一个终端，方便我关掉它
 Type=Application
