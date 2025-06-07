@@ -36,8 +36,34 @@ Ventoy2Disk.sh  命令  [选项]  /dev/XXX
 2. 必须cd到ventoy解压之后的目录下执行此脚本
 3. 请务必输入正确的设备名称，ventoy不会检查你输入的设备是U盘还是本地硬盘，如果输错了有可能会把你的系统盘格式化掉哦！
 
-我目前在已经安装了archlinux的电脑上工作，希望在一块硬盘上安装archlinux
-首先对硬盘进行分区
+
+
+
+
+
+
+
+然后进行安装过程
+首先从装机U盘里启动arvhlinux的iso
+
+
+
+
+然后进行联网
+这里因为我使用的是无线wifi,所以我使用iwctl进行联网
+输入iwctl进入交互模式
+device list 列出无线设备
+
+station <设备名> scan           # 例：station wlan0 scan  
+扫描附近网络
+
+station <设备名> get-networks   # 显示扫描到的 SSID 列表:cite[1]
+列出可用网络
+
+station <设备名> connect <SSID> # 输入密码后连接:cite[1]
+连接网络
+
+对硬盘进行分区
 这一步我使用gdiak
 
 由于我使用UEFI+GPT
