@@ -4,8 +4,24 @@
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+# 自动安装缺失的 Zsh 插件
+zsh_plugins=(
+    "zsh-autosuggestions https://github.com/zsh-users/zsh-autosuggestions"
+    "zsh-syntax-highlighting https://github.com/zsh-users/zsh-syntax-highlighting"
+)
 
-plugins=(git emotty emoji thefuck web-search jsontools z vi-mode zsh-syntax-highlighting zsh-autosuggestions 1password sudo command-not-found)
+for plugin in "${zsh_plugins[@]}"; do
+    plugin_name=${plugin%% *}
+    plugin_url=${plugin#* }
+    plugin_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/$plugin_name"
+    
+    if [ ! -d "$plugin_dir" ]; then
+        echo "Installing Zsh plugin: $plugin_name"
+        git clone --depth=1 "$plugin_url" "$plugin_dir"
+    fi
+done
+
+plugins=(git emotty emoji extract  web-search jsontools z vi-mode zsh-syntax-highlighting zsh-autosuggestions 1password sudo command-not-found)
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
