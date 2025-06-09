@@ -3,7 +3,14 @@ archlinux安装教程
 archlinux的官方教程在：https://wiki.archlinux.org/title/Installation_guide
 
 首先要制作启动U盘
-这里推荐ventoy
+
+
+可以使用linux中的dd命令
+或者impression(这是archlinux仓库中自带的工具)
+sudo dd if=/path/to/your/image.iso of=/dev/sdX bs=4M status=progress && sync
+impression是图形工具
+
+这里仅讲解ventoy
 大家可以自己去官网查看教程
 https://www.ventoy.net/en/index.html
 这里只介绍Linux上的教程
@@ -37,16 +44,8 @@ Ventoy2Disk.sh  命令  [选项]  /dev/XXX
 3. 请务必输入正确的设备名称，ventoy不会检查你输入的设备是U盘还是本地硬盘，如果输错了有可能会把你的系统盘格式化掉哦！
 
 
-
-
-
-
-
-
 然后进行安装过程
 首先从装机U盘里启动arvhlinux的iso
-
-
 
 
 然后进行联网
@@ -117,10 +116,14 @@ pacman -Syyu
 
 
 然后下载一些基础包
-pacstrap -K /mnt base linux linux-firmware
+pacstrap -K /mnt base linux linux-firmware --needed
 
 fstab生成fstab文件
 genfstab -U /mnt >> /mnt/etc/fstab
+
+检查一下该文件
+cat /mnt/etc/fstab
+
 
 chroot一下
 arch-chroot /mnt

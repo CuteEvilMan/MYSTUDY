@@ -39,16 +39,19 @@ sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-extra ttf-hanazono adobe-sou
 
 
 然后可以安装一个图形桌面
-我比较喜欢 gnome
 
-因此
+gnome安装：
 
 sudo pacman -S wayland gdm gnome gnome-extra --needed
 
 所有选项都选default即可
 sytemctl enable gdm --now
 开机启动图形桌面
+
+
 sudo pacman -S plasma-meta  kde-applications-meta sddm wayland --needed
+
+
 可以安装kde
 
 安装中文输入法
@@ -79,7 +82,7 @@ sudo pacman -S archlinuxcn-keyring
 
 然后 sudo pacman -Syyu
 
-sudo pacman -S paru --needed  下载paru 
+sudo pacman -S paru --needed  下载paru ，yay也可以，获得aur支持
 
 
 sudo pacman -S chromium --needed
@@ -91,8 +94,8 @@ sudo pacman -S gnome-browser-connector --needed
 使得chromium可以管理插件
 
  sudo pacman -S libreoffice --needed
-
  安装libreoffice
+
  sudo pacman -S libreoffice-fresh-zh-cn --needed
 安装libreoffice中文包
 
@@ -109,6 +112,11 @@ sudo pacman -S zsh curl --needed
 安装zsh
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+再使用我的Z.zshrc文件
+cp Z.zshrc ~/.zshrc
+source .zshrc即可
+
+
 
 现在再来介绍一下linuxqq如何使用(fcitx5中文输入)
 
