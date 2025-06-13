@@ -91,7 +91,11 @@ sudo pacman -S chromium --needed
 
 
 sudo pacman -S gnome-browser-connector --needed
-使得chromium可以管理插件
+使得chromium可以管理gnome插件
+
+
+sudo pacman -S firewalled tlp --needed
+可以安装防火墙和电源管理软件
 
  sudo pacman -S libreoffice --needed
  安装libreoffice

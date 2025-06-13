@@ -152,6 +152,7 @@ pacman -S tlp powertop --needed 这些软件包用来笔记本电脑管理电源
 我们中国人选上海就行了，如果你在其它地方可以问问ai 
 
 hwclock --systohc一下
+将系统时间（软件时间）写入到硬件时钟（BIOS 时钟）中。
 
 编辑一下 /etc/locale.gen
 vim /etc/locale.gen
@@ -160,6 +161,14 @@ vim /etc/locale.gen
 en_US.UTF-8 UTF-8
 zh_CN.UTF-8 UTF-8
 
+启用中文和英文语言环境，UTF-8可以满绝足大部分需求
+$ cat /etc/locale.gen                    
+en_US.UTF-8 UTF-8
+zh_CN.UTF-8 UTF-8
+zh_CN.GBK GBK
+zh_CN.GB2312 GB2312
+zh_CN.GB18030 GB18030
+可以满足所有中文需求
 再创建 /etc/locale.conf文件
 写入
 
@@ -167,6 +176,7 @@ LANG=en_US.UTF-8
 不会用neovim建议问一下ai,或者问一下nano怎么用
 
 locale-gen一下
+根据 /etc/locale.gen 文件中的配置生成或更新系统可用的语言环境（locale）文件
 
 编辑/etc/hostname
 vim /etc/hostname
@@ -180,7 +190,8 @@ passwd
 
 安装一个引导加载环境
 
-archlinux的官方介绍：https://wiki.archlinux.org/title/Arch_boot_process#Boot_loader
+archlinux的官方介绍：
+https://wiki.archlinux.org/title/Arch_boot_process#Boot_loader
 
 我推荐GRUB
 sudo pacman -S grub efibootmgr --needed
