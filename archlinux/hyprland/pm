@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# 亮度控制工具 - 使用 brightnessctl 设置屏幕亮度
+# 用法: sb [0-100]  设置亮度百分比
+
+# 检查参数是否为空
+if [ -z "$1" ]; then
+    echo "错误：请指定亮度百分比 (0-100)"
+    echo "示例: sb 30   # 设置亮度为30%"
+    exit 1
+fi
+
+# 检查参数是否为数字
+if ! [[ "$1" =~ ^[0-9]+$ ]]; then
+    echo "错误：参数必须是整数"
+    exit 1
+fi
+
+# 检查参数范围
+if [ "$1" -lt 0 ] || [ "$1" -gt 100 ]; then
+    echo "错误：亮度值必须在 0-100 之间"
+    exit 1
+fi
+
+# 设置亮度（使用与快捷键相同的指数曲线和最小步进）
+brightnessctl -e4 -n2 set "$1%"
+
+# 获取当前亮度百分比
+current_percent=$(brightnessctl info | grep -oP "\(\K\d+%" | head -n1 | tr -d '%')
+
+# 显示结果
+printf "亮度已设置为: %d%%\n" "$current_percent"

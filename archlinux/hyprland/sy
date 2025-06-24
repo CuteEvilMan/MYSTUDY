@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# 音量控制工具 - 使用 wpctl 设置默认音频设备音量
+# 用法: sy [0-100]  设置音量百分比
+
+# 检查参数是否为空
+if [ -z "$1" ]; then
+    echo "错误：请指定音量百分比 (0-100)"
+    echo "示例: sy 30   # 设置音量为30%"
+    exit 1
+fi
+
+# 检查参数是否为数字
+if ! [[ "$1" =~ ^[0-9]+$ ]]; then
+    echo "错误：参数必须是整数"
+    exit 1
+fi
+
+# 检查参数范围
+if [ "$1" -lt 0 ] || [ "$1" -gt 100 ]; then
+    echo "错误：音量值必须在 0-100 之间"
+    exit 1
+fi
+
+# 设置音量
+wpctl set-volume @DEFAULT_AUDIO_SINK@ "$1%"
+
+# 显示结果
+current_volume=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2 * 100}')
+printf "音量已设置为: %d%%\n" "$current_volume"
