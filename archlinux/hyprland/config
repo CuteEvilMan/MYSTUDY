@@ -1,0 +1,86 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 30,
+  "modules-left": ["hyprland/workspaces", "hyprland/window"],
+  "modules-center": ["clock"],
+  "modules-right": ["tray", "network","bluetooth", "pulseaudio", "cpu", "temperature", "memory", "battery"],
+  
+  "hyprland/window": {
+    "format": "{}",
+    "max-length": 50
+  },
+  
+  "clock": {
+    "format": " {:%H:%M}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+  },
+  
+  "cpu": {
+    "format": " {usage}%",
+    "interval": 5,
+    "tooltip": false
+  },
+  
+  "temperature": {
+    "hwmon-path": "/sys/class/hwmon/hwmon5/temp1_input",  // coretemp 传感器
+    "format": " {temperatureC}°C",
+    "critical-threshold": 80,
+    "interval": 5,
+    "format-critical": " {temperatureC}°C"  // 高温时使用火焰图标
+  },
+  
+  "memory": {
+    "format": " {}%",
+    "interval": 5
+  },
+  
+  "battery": {
+    "bat": "BAT0",  // 根据您的 hwmon1 路径指定电池
+    "adapter": "AC", // 根据您的 hwmon0 路径指定适配器
+    "states": {
+      "good": 95,
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-alt": "{time} {icon}",
+    "format-icons": ["", "", "", "", ""]
+  },
+  
+  "network": {
+    "format-wifi": " {essid}",
+    "format-ethernet": " {ifname}",
+    "format-disconnected": "⚠ 无网络",
+    "tooltip-format": "{ipaddr}/{cidr}",
+    "interval": 5
+  },
+  
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-bluetooth": "{icon} {volume}%",
+    "format-muted": "🔇",
+    "format-icons": {
+      "headphone": "",
+      "default": ["🔈", "🔉", "🔊"]
+    },
+    "scroll-step": 5
+  },
+  
+  "tray": {
+    "spacing": 10
+  },
+  "bluetooth": {
+  "format": " {status}",
+  "format-disabled": " 关闭",  // 蓝牙关闭时显示
+  "format-connected": " {device_alias}",  // 连接设备时显示
+  "format-connected-battery": " {device_alias} ({device_battery_percentage}%)",  // 带电池百分比
+  "tooltip-format": "控制器: {controller_alias}\n地址: {controller_address}",
+  "tooltip-format-connected": "控制器: {controller_alias}\n地址: {controller_address}\n\n已连接: {device_enumerate}",
+  "tooltip-format-enumerate-connected": "{device_alias} ({device_address})",
+  "on-click": "blueman-manager",  // 点击打开蓝牙管理器
+  "on-click-right": "bluetoothctl power on"  // 右键开启蓝牙
+}
+}
