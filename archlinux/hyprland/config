@@ -13,7 +13,8 @@
   
   "clock": {
     "format": " {:%H:%M}",
-    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "interval": 30
   },
   
   "cpu": {
@@ -47,7 +48,8 @@
     "format-charging": " {capacity}%",
     "format-plugged": " {capacity}%",
     "format-alt": "{time} {icon}",
-    "format-icons": ["", "", "", "", ""]
+    "format-icons": ["", "", "", "", ""],
+    "interval": 30
   },
   
   "network": {
@@ -55,7 +57,7 @@
     "format-ethernet": " {ifname}",
     "format-disconnected": "⚠ 无网络",
     "tooltip-format": "{ipaddr}/{cidr}",
-    "interval": 5
+    "interval": 10
   },
   
   "pulseaudio": {
@@ -81,6 +83,7 @@
   "tooltip-format-connected": "控制器: {controller_alias}\n地址: {controller_address}\n\n已连接: {device_enumerate}",
   "tooltip-format-enumerate-connected": "{device_alias} ({device_address})",
   "on-click": "blueman-manager",  // 点击打开蓝牙管理器
-  "on-click-right": "bluetoothctl power on"  // 右键开启蓝牙
+  "on-click-right": "bluetoothctl power on",
+  "interval": 15
 }
 }

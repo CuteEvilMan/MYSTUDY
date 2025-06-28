@@ -35,8 +35,21 @@ progress_bar() {
     local value=$1
     local max=$2
     local width=20
+    
+    # 防止除以零错误
+    if [ "$max" -le 0 ]; then
+        printf "${RED}错误: 无效的最大值${RESET}"
+        return
+    fi
+    
     local filled=$((value * width / max))
     local empty=$((width - filled))
+    
+    # 确保填充值不超过宽度
+    if [ "$filled" -gt "$width" ]; then
+        filled=$width
+        empty=0
+    fi
     
     printf "${GREEN}"
     printf "%${filled}s" | tr ' ' '■'
@@ -52,16 +65,18 @@ get_battery_info() {
     
     # 查找电池设备
     for bat in $(ls $bat_path | grep -i BAT); do
-        local capacity=$(cat $bat_path/$bat/capacity 2>/dev/null)
-        local status=$(cat $bat_path/$bat/status 2>/dev/null)
-        
-        if [ -n "$capacity" ]; then
-            local status_icon="?"
-            [ "$status" == "Charging" ] && status_icon="⚡"
-            [ "$status" == "Discharging" ] && status_icon="▼"
-            [ "$status" == "Full" ] && status_icon="✓"
+        if [ -f "$bat_path/$bat/capacity" ]; then
+            local capacity=$(cat "$bat_path/$bat/capacity" 2>/dev/null)
+            local status=$(cat "$bat_path/$bat/status" 2>/dev/null)
             
-            battery_info+="${status_icon} ${capacity}% "
+            if [ -n "$capacity" ]; then
+                local status_icon="?"
+                [ "$status" == "Charging" ] && status_icon="⚡"
+                [ "$status" == "Discharging" ] && status_icon="▼"
+                [ "$status" == "Full" ] && status_icon="✓"
+                
+                battery_info+="${status_icon} ${capacity}% "
+            fi
         fi
     done
     
@@ -82,6 +97,13 @@ get_cpu_usage() {
     # 计算使用率
     local diff_idle=$((cpu2[1] - cpu1[1]))
     local diff_total=$((cpu2[2] - cpu1[2]))
+    
+    # 防止除以零错误
+    if [ "$diff_total" -le 0 ]; then
+        echo "0%"
+        return
+    fi
+    
     local usage=$((100 * (diff_total - diff_idle) / diff_total))
     
     echo "$usage%"
@@ -89,13 +111,22 @@ get_cpu_usage() {
 
 # 获取内存信息
 get_memory_info() {
-    local mem_info=($(free -m | awk '/Mem:/ {print $2, $3, $7}'))
-    local total=${mem_info[0]}
-    local used=${mem_info[1]}
-    local available=${mem_info[2]}
-    local used_percent=$((used * 100 / total))
+    # 直接从/proc/meminfo获取更可靠的数据
+    local total_kb=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+    local free_kb=$(grep MemFree /proc/meminfo | awk '{print $2}')
+    local available_kb=$(grep MemAvailable /proc/meminfo | awk '{print $2}')
+    local buffers_kb=$(grep Buffers /proc/meminfo | awk '{print $2}')
+    local cached_kb=$(grep '^Cached' /proc/meminfo | awk '{print $2}')
     
-    echo "${used}MB/${total}MB (可用:${available}MB)"
+    # 计算已使用内存
+    local used_kb=$((total_kb - free_kb - buffers_kb - cached_kb))
+    
+    # 转换为MB
+    local total_mb=$((total_kb / 1024))
+    local used_mb=$((used_kb / 1024))
+    local available_mb=$((available_kb / 1024))
+    
+    echo "${used_mb}MB/${total_mb}MB (可用:${available_mb}MB)"
 }
 
 # 获取磁盘信息
@@ -110,25 +141,71 @@ get_time_info() {
 
 # 获取网络状态
 get_network_info() {
-    local ip=$(ip route get 1.2.3.4 | awk '{print $7}' | head -n1)
-    local ssid=$(iwgetid -r)
-    local speed=$(ip -s link | awk '/state UP/{getline; print $1 " RX | " $8 " TX"}')
+    # 获取IP地址（更可靠的方法）
+    local ip=$(ip route get 1 2>/dev/null | awk '{for(i=1;i<=NF;i++) if($i=="src") print $(i+1)}')
+    
+    # 获取SSID（无线网络）
+    local ssid=""
+    if command -v iwgetid &> /dev/null; then
+        ssid=$(iwgetid -r)
+    fi
+    
+    # 获取网络速度
+    local rx_speed=""
+    local tx_speed=""
+    if [ -d /sys/class/net ]; then
+        for iface in $(ls /sys/class/net); do
+            # 跳过回环接口
+            [ "$iface" = "lo" ] && continue
+            
+            # 检查接口是否启用
+            if [ $(cat /sys/class/net/$iface/operstate) = "up" ]; then
+                # 获取接收和发送的字节数
+                rx_bytes=$(cat /sys/class/net/$iface/statistics/rx_bytes)
+                tx_bytes=$(cat /sys/class/net/$iface/statistics/tx_bytes)
+                
+                # 转换为可读格式
+                rx_speed=$(numfmt --to=iec $rx_bytes)
+                tx_speed=$(numfmt --to=iec $tx_bytes)
+                
+                # 如果有线连接，设置ssid
+                [ -z "$ssid" ] && ssid="有线连接 ($iface)"
+                break
+            fi
+        done
+    fi
     
     [ -z "$ip" ] && ip="N/A"
-    [ -z "$ssid" ] && ssid="有线连接"
+    [ -z "$ssid" ] && ssid="未连接"
+    [ -z "$rx_speed" ] && rx_speed="N/A"
+    [ -z "$tx_speed" ] && tx_speed="N/A"
     
-    echo "$ssid | $ip | $speed"
+    echo "$ssid | IP: $ip | 收: $rx_speed | 发: $tx_speed"
 }
 
 # 获取温度信息
 get_temp_info() {
-    local temp_path="/sys/class/thermal/thermal_zone0/temp"
-    if [ -f "$temp_path" ]; then
-        local temp=$(cat $temp_path)
-        echo "$((temp/1000))°C"
-    else
-        echo "N/A"
-    fi
+    # 尝试不同的温度传感器路径
+    local temp_paths=(
+        "/sys/class/thermal/thermal_zone0/temp"
+        "/sys/class/hwmon/hwmon0/temp1_input"
+        "/sys/class/hwmon/hwmon1/temp1_input"
+    )
+    
+    for path in "${temp_paths[@]}"; do
+        if [ -f "$path" ]; then
+            local temp=$(cat "$path")
+            # 有些传感器是毫摄氏度，有些是摄氏度
+            if [ $temp -gt 10000 ]; then
+                echo "$((temp/1000))°C"
+            else
+                echo "$((temp/1000)).$((temp%1000/100))°C"
+            fi
+            return
+        fi
+    done
+    
+    echo "N/A"
 }
 
 # 获取系统负载
@@ -138,7 +215,18 @@ get_load_info() {
 
 # 获取系统运行时间
 get_uptime_info() {
-    uptime -p | sed 's/up //'
+    # 使用更可靠的uptime解析方法
+    awk '{printf "%d天%d小时%d分钟", int($1/86400), int(($1%86400)/3600), int(($1%3600)/60)}' /proc/uptime
+}
+
+# 获取主机名
+get_hostname() {
+    # 使用/proc文件系统获取主机名
+    if [ -f /proc/sys/kernel/hostname ]; then
+        cat /proc/sys/kernel/hostname
+    else
+        echo "未知主机"
+    fi
 }
 
 # 主显示函数
@@ -151,7 +239,7 @@ display_system_stats() {
     
     # 系统信息
     print_section "⚙️ 系统信息"
-    print_info "主机名" "$(hostname)"
+    print_info "主机名" "$(get_hostname)"
     print_info "系统" "$(uname -srm)"
     print_info "运行时间" "$(get_uptime_info)"
     print_separator
@@ -170,10 +258,16 @@ display_system_stats() {
     
     # 内存状态
     print_section "🧠 内存状态"
-    local mem_info=($(free -m | awk '/Mem:/ {print $2, $3}'))
+    # 直接从/proc/meminfo获取数据用于进度条
+    local total_kb=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+    local free_kb=$(grep MemFree /proc/meminfo | awk '{print $2}')
+    local buffers_kb=$(grep Buffers /proc/meminfo | awk '{print $2}')
+    local cached_kb=$(grep '^Cached' /proc/meminfo | awk '{print $2}')
+    local used_kb=$((total_kb - free_kb - buffers_kb - cached_kb))
+    
     print_info "使用情况" "$(get_memory_info)"
     printf "  内存占用: "
-    progress_bar ${mem_info[1]} ${mem_info[0]}
+    progress_bar $used_kb $total_kb
     printf "\n"
     print_separator
     
