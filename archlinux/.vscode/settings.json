@@ -1,0 +1,8 @@
+{
+  // 将特定文件名识别为 ini，避免 TypeScript/TS server 将其当作代码并给出错误
+  "files.associations": {
+    "mirrorlist": "ini",
+    "*.mirrorlist": "ini",
+    "/home/alc2/MYSTUDY/archlinux/mirrorlist": "ini"
+  }
+}
