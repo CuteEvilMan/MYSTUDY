@@ -136,6 +136,10 @@ arch-chroot /mnt
 
 ## 在 chroot 中的系统配置
 
+
+***
+    如果你电脑上有nvidia的硬件,请阅读nvidia.md
+**
 安装并配置常用软件包：
 
 ```bash
@@ -221,7 +225,15 @@ reboot
 
 ## 常见问题（FAQ）
 
-- 无法联网：检查网卡驱动是否加载，查看 `ip link`、`dmesg`。无线用 `iwctl` 或 `iw`/`wpa_supplicant`。
+- 无法联网：
+    - 检查网卡驱动是否加载，查看 `ip link`、`dmesg`。
+    - 无线用 `iwctl` 或 `iw`/`wpa_supplicant`。
+    - 若遇到“软阻塞(Soft blocked)”问题，可用 `rfkill` 工具解除：
+        ```bash
+        rfkill list
+        rfkill unblock all
+        ```
+        若 BIOS/硬件开关关闭也会导致软阻塞，请确保物理开关已打开。
 - 找不到 EFI 分区：确认使用 UEFI 启动且已创建 FAT32 的 EFI 分区并挂载到 `/boot`（或 `/boot/efi`，视习惯）。
 - grub 安装失败：检查 `--efi-directory` 指向已挂载且为 FAT32 的 EFI 分区，且已安装 `efibootmgr`。
 
